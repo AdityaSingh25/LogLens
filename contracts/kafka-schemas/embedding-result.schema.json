@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EmbeddingResultMessage",
+  "type": "object",
+  "properties": {
+    "log_id":       { "type": "string", "format": "uuid" },
+    "tenant_id":    { "type": "string" },
+    "vector":       { "type": "array", "items": { "type": "number" }, "minItems": 1536, "maxItems": 1536 },
+    "model":        { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["log_id", "tenant_id", "vector", "model", "generated_at"]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RawLogMessage",
+  "type": "object",
+  "properties": {
+    "log_id":       { "type": "string", "format": "uuid" },
+    "tenant_id":    { "type": "string" },
+    "service_name": { "type": "string" },
+    "timestamp":    { "type": "string", "format": "date-time" },
+    "level": {
+      "type": "string",
+      "enum": ["TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
+    },
+    "message":       { "type": "string" },
+    "raw_body":      { "type": "string" },
+    "source_format": {
+      "type": "string",
+      "enum": ["JSON", "LOGFMT", "PLAINTEXT"]
+    },
+    "metadata":  { "type": "object", "additionalProperties": { "type": "string" } },
+    "trace_id":  { "type": "string" },
+    "span_id":   { "type": "string" }
+  },
+  "required": ["log_id", "tenant_id", "service_name", "timestamp", "level", "message", "raw_body", "source_format"]
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ParsedLogMessage",
+  "type": "object",
+  "allOf": [{ "$ref": "./raw-log.schema.json" }],
+  "properties": {
+    "parsed_fields":       { "type": "object", "additionalProperties": true },
+    "normalized_message":  { "type": "string" },
+    "parse_duration_ms":   { "type": "number" },
+    "parser_version":      { "type": "string" }
+  },
+  "required": ["parsed_fields", "normalized_message", "parse_duration_ms", "parser_version"]
+}
