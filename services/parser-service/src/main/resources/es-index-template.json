@@ -1,0 +1,23 @@
+{
+  "index_patterns": ["logs-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.refresh_interval": "5s"
+    },
+    "mappings": {
+      "properties": {
+        "log_id":             { "type": "keyword" },
+        "tenant_id":          { "type": "keyword" },
+        "service_name":       { "type": "keyword" },
+        "timestamp":          { "type": "date" },
+        "level":              { "type": "keyword" },
+        "message":            { "type": "text", "analyzer": "standard" },
+        "normalized_message": { "type": "text", "analyzer": "standard" },
+        "parsed_fields":      { "type": "object", "dynamic": true },
+        "trace_id":           { "type": "keyword" }
+      }
+    }
+  }
+}
