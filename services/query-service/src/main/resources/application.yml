@@ -1,0 +1,51 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: query-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${AUTH_SERVICE_JWKS_URI:http://localhost:8081/auth/.well-known/jwks.json}
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${POSTGRES_DB:loglens}
+    username: ${POSTGRES_USER:loglens}
+    password: ${POSTGRES_PASSWORD:loglens}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      url: ${REDIS_URL:redis://localhost:6379}
+
+elasticsearch:
+  uris: ${ES_URL:http://localhost:9200}
+
+qdrant:
+  url: ${QDRANT_URL:http://localhost:6333}
+
+openai:
+  api-key: ${OPENAI_API_KEY}
+  model: gpt-4o-mini
+  embedding-model: text-embedding-3-small
+
+query:
+  cache:
+    ttl-seconds: 60
+  rrf:
+    k: 60
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.loglens: INFO
