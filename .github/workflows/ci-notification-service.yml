@@ -1,0 +1,19 @@
+name: CI — notification-service
+
+on:
+  push:
+    paths: ['services/notification-service/**', 'contracts/**']
+  pull_request:
+    paths: ['services/notification-service/**', 'contracts/**']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm', cache-dependency-path: services/notification-service/package-lock.json }
+      - run: cd services/notification-service && npm ci
+      - run: cd services/notification-service && npm run lint
+      - run: cd services/notification-service && npm run build
+      - run: cd services/notification-service && npm test

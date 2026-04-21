@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parser-service
+  namespace: loglens
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: parser-service
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: parser-service
+    spec:
+      containers:
+        - name: parser-service
+          image: loglens/parser-serviceatest
+          ports:
+            - containerPort: 8083
+          envFrom:
+            - secretRef:
+                name: loglens-secrets
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: parser-service
+          resources:
+            requests: { cpu: "250m", memory: "512Mi" }
+            limits:   { cpu: "1000m", memory: "1Gi" }
+          readinessProbe:
+            httpGet: { path: /actuator/health, port: 8083 }
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /actuator/health, port: 8083 }
+            initialDelaySeconds: 40
+            periodSeconds: 30

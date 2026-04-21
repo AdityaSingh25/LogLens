@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: parser-service
+  namespace: loglens
+spec:
+  selector:
+    app: parser-service
+  ports:
+    - port: 8083
+      targetPort: 8083

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: loglens
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notification-service
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          image: loglens/notification-serviceatest
+          envFrom:
+            - secretRef:
+                name: loglens-secrets
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: notification-service
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
+          readinessProbe:
+            exec:
+              command: ["node", "-e", "process.exit(0)"]
+            initialDelaySeconds: 10
+            periodSeconds: 15

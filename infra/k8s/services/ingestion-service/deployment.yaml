@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion-service
+  namespace: loglens
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ingestion-service
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: ingestion-service
+    spec:
+      containers:
+        - name: ingestion-service
+          image: loglens/ingestion-service:latest
+          ports:
+            - containerPort: 8082
+          envFrom:
+            - secretRef:
+                name: loglens-secrets
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: ingestion-service
+          resources:
+            requests: { cpu: "250m", memory: "512Mi" }
+            limits:   { cpu: "1000m", memory: "1Gi" }
+          readinessProbe:
+            httpGet: { path: /actuator/health, port: 8082 }
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /actuator/health, port: 8082 }
+            initialDelaySeconds: 40
+            periodSeconds: 30

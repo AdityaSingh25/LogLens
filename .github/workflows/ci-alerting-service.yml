@@ -1,0 +1,17 @@
+name: CI — alerting-service
+
+on:
+  push:
+    paths: ['services/alerting-service/**', 'contracts/**']
+  pull_request:
+    paths: ['services/alerting-service/**', 'contracts/**']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { java-version: '21', distribution: 'temurin', cache: 'maven' }
+      - run: mvn -pl services/alerting-service package -DskipTests -q
+      - run: mvn -pl services/alerting-service test -q

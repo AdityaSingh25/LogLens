@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alerting-service
+  namespace: loglens
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alerting-service
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: alerting-service
+    spec:
+      containers:
+        - name: alerting-service
+          image: loglens/alerting-serviceatest
+          ports:
+            - containerPort: 8085
+          envFrom:
+            - secretRef:
+                name: loglens-secrets
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: alerting-service
+          resources:
+            requests: { cpu: "250m", memory: "512Mi" }
+            limits:   { cpu: "1000m", memory: "1Gi" }
+          readinessProbe:
+            httpGet: { path: /actuator/health, port: 8085 }
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /actuator/health, port: 8085 }
+            initialDelaySeconds: 40
+            periodSeconds: 30
