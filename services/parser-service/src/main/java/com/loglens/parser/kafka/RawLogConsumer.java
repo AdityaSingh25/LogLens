@@ -4,21 +4,27 @@ import com.loglens.parser.domain.ParsedLogMessage;
 import com.loglens.parser.domain.RawLogMessage;
 import com.loglens.parser.elasticsearch.ElasticsearchIndexer;
 import com.loglens.parser.service.LogParserServiceImpl;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class RawLogConsumer {
+
+    private static final Logger log = LoggerFactory.getLogger(RawLogConsumer.class);
 
     private final LogParserServiceImpl parserService;
     private final ElasticsearchIndexer esIndexer;
     private final ParsedLogProducer parsedLogProducer;
+
+    public RawLogConsumer(LogParserServiceImpl parserService, ElasticsearchIndexer esIndexer, ParsedLogProducer parsedLogProducer) {
+        this.parserService = parserService;
+        this.esIndexer = esIndexer;
+        this.parsedLogProducer = parsedLogProducer;
+    }
 
     @KafkaListener(
             topics = "raw-logs",

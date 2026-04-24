@@ -38,7 +38,10 @@ public class ZScoreAnomalyDetector {
         double mean = mean(history);
         double stddev = stddev(history, mean);
 
-        if (stddev == 0) return false; // no variance — can't compute z-score
+        if (stddev == 0) {
+            // Constant baseline — any significant spike above the stable mean is anomalous
+            return current > mean * 2;
+        }
 
         double zScore = (current - mean) / stddev;
         return zScore > zscoreThreshold;

@@ -4,8 +4,8 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.indices.PutIndexTemplateRequest;
 import com.loglens.parser.domain.ParsedLogMessage;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -13,12 +13,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class ElasticsearchIndexer {
+
+    private static final Logger log = LoggerFactory.getLogger(ElasticsearchIndexer.class);
 
     private final ElasticsearchClient esClient;
     private final IndexNameResolver indexNameResolver;
+
+    public ElasticsearchIndexer(ElasticsearchClient esClient, IndexNameResolver indexNameResolver) {
+        this.esClient = esClient;
+        this.indexNameResolver = indexNameResolver;
+    }
 
     @PostConstruct
     public void registerIndexTemplate() {

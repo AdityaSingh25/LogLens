@@ -1,4 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+// Mock config before any module that imports it is loaded
+vi.mock('../config/config', () => ({
+  config: {
+    KAFKA_BROKERS: ['localhost:9092'],
+    KAFKA_GROUP_ID: 'embedding-service',
+    QDRANT_URL: 'http://localhost:6333',
+    OPENAI_API_KEY: 'test-key',
+    EMBEDDING_MODEL: 'text-embedding-3-small',
+    EMBEDDING_DIMENSIONS: 1536,
+    BATCH_MAX_SIZE: 100,
+    BATCH_FLUSH_MS: 500,
+  },
+}));
+
 import { processBatch } from './embeddingService';
 import * as openaiClient from '../clients/openaiClient';
 import * as qdrantClient from '../clients/qdrantClient';

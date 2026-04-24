@@ -2,18 +2,24 @@ package com.loglens.parser.service;
 
 import com.loglens.parser.domain.ParsedLogMessage;
 import com.loglens.parser.domain.RawLogMessage;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class LogParserServiceImpl {
+
+    private static final Logger log = LoggerFactory.getLogger(LogParserServiceImpl.class);
 
     private final JsonLogParser jsonParser;
     private final LogfmtParser logfmtParser;
     private final PlainTextParser plainTextParser;
+
+    public LogParserServiceImpl(JsonLogParser jsonParser, LogfmtParser logfmtParser, PlainTextParser plainTextParser) {
+        this.jsonParser = jsonParser;
+        this.logfmtParser = logfmtParser;
+        this.plainTextParser = plainTextParser;
+    }
 
     public ParsedLogMessage parse(RawLogMessage raw) {
         long start = System.currentTimeMillis();
